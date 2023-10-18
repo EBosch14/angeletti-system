@@ -1,0 +1,167 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Store {
+  id         String     @id @default(uuid())
+  username   String
+  password   String
+  clients    Client[]
+  providers  Provider[]
+  products   Product[]
+  services   Service[]
+  categories Category[]
+  orders     Order[]
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+}
+
+model Provider {
+  id             Int       @id @default(autoincrement())
+  name           String
+  email          String?
+  phone          String
+  country        String?
+  state          String?
+  city           String?
+  address        String?
+  postal_code    String?
+  other_contacts Json?
+  products       Product[]
+  store_id       String
+  Store          Store     @relation(fields: [store_id], references: [id])
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  @@index([store_id])
+}
+
+model Client {
+  id             Int       @id @default(autoincrement())
+  name           String
+  dni            String?
+  email          String?
+  phone          String
+  country        String?
+  state          String?
+  city           String?
+  address        String?
+  postal_code    String?
+  other_contacts Json?
+  birthday       String?
+  services       Service[]
+  orders         Order[]
+  store_id       String
+  Store          Store     @relation(fields: [store_id], references: [id])
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  @@index([store_id])
+}
+
+model Category {
+  id         String    @id @default(uuid())
+  name       String
+  sizes      Size[]
+  products   Product[]
+  store_id   String
+  Store      Store     @relation(fields: [store_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  @@index([store_id])
+}
+
+model Size {
+  id          String    @id @default(uuid())
+  name        String
+  category_id String
+  products    Product[]
+  Category    Category  @relation(fields: [category_id], references: [id])
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  @@index([category_id])
+}
+
+model Service {
+  id            Int      @id @default(autoincrement())
+  client_id     Int
+  issues        String
+  description   String
+  solution      String?
+  state         String
+  used_products Json
+  price         Decimal  @default(0)
+  is_paid       Boolean  @default(false)
+  store_id      String
+  Store         Store    @relation(fields: [store_id], references: [id])
+  Client        Client   @relation(fields: [client_id], references: [id])
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@index([store_id])
+  @@index([client_id])
+}
+
+model Product {
+  id             Int      @id @default(autoincrement())
+  name           String
+  stock          Int
+  provider_id    Int
+  provider_code  String?
+  purchase_price Decimal
+  sale_price     Decimal
+  description    String?
+  model          String?
+  brand          String?
+  images         Image[]
+  category_id    String
+  size_id        String
+  is_archived    Boolean  @default(false)
+  store_id       String
+  Provider       Provider @relation(fields: [provider_id], references: [id])
+  Category       Category @relation(fields: [category_id], references: [id])
+  Size           Size     @relation(fields: [size_id], references: [id])
+  Store          Store    @relation(fields: [store_id], references: [id])
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@index([category_id])
+  @@index([size_id])
+  @@index([provider_id])
+  @@index([store_id])
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  client_id  Int
+  store_id   String
+  Store      Store    @relation(fields: [store_id], references: [id])
+  Client     Client   @relation(fields: [client_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([store_id])
+  @@index([client_id])
+}
+
+model Image {
+  id         String   @id @default(uuid())
+  url        String
+  product_id Int
+  Product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([product_id])
+}
