@@ -31,10 +31,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ProviderSession>
-          <Navbar />
-          {children}
-        </ProviderSession>
+        <ProviderSession>{children}</ProviderSession>
       </body>
     </html>
   );
