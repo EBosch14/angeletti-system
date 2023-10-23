@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import prismadb from "@/lib/prismadb";
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
@@ -46,7 +47,7 @@ export default function SignIn() {
     if (!signInData?.ok) {
       console.log(signInData);
     } else {
-      router.push(`/${data.username}`);
+      router.push(`/`);
     }
   };
 
