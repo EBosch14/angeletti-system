@@ -3,9 +3,17 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const options: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
+  pages :{
+    signIn : "/sign_in"
+  },
+  session:{
+    strategy: "jwt"
+  },
+  // adapter: PrismaAdapter(prismadb),
   providers: [
     CredentialsProvider({
-      name: "Sign in",
+      name: "Credentials",
       credentials: {
         username: {
           label: "username",
@@ -36,4 +44,24 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    async jwt({token, user}){
+      if(user){
+        return {
+          ...token,
+          username: user.username
+        }
+      }
+      return token
+    },
+    async session({session, user, token}){
+      return {
+        ...session,
+        user : {
+          ...session.user,
+          username: token.username
+        }
+      }
+    }
+  }
 };
