@@ -1,14 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
+import prismadb from "@/lib/prismadb";
 import { formatter } from "@/lib/utils";
 import { CreditCardIcon, DollarSignIcon, PackageIcon } from "lucide-react";
 
 interface DashboardPageProps {
-  params: { store_id: string };
+  params: { storeId: string };
 }
 
-const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
+const RootPage: React.FC<DashboardPageProps> = async ({ params }) => {
   const totalRevenue = () => {};
   const salesCount = () => {};
   const stockCount = () => {};
@@ -56,4 +57,4 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
   );
 };
 
-export default DashboardPage;
+export default RootPage;

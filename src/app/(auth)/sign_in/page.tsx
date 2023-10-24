@@ -46,7 +46,7 @@ export default function SignIn() {
     if (!signInData?.ok) {
       console.log(signInData);
     } else {
-      router.push(`/${data.username}`);
+      router.push(`/`);
     }
   };
 
