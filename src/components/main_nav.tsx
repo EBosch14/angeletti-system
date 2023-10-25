@@ -13,44 +13,44 @@ export function MainNav({
 
   const routes = [
     {
-      href: `/${params.store_id}`,
+      href: ``,
       label: "general",
-      active: pathname === `/${params.store_id}`,
+      active: pathname === ``,
     },
     {
-      href: `/${params.store_id}/products`,
+      href: `/products`,
       label: "productos",
-      active: pathname === `/${params.store_id}/products`,
+      active: pathname === `/products`,
     },
     {
-      href: `/${params.store_id}/services`,
+      href: `/services`,
       label: "servicios",
-      active: pathname === `/${params.store_id}/services`,
+      active: pathname === `/services`,
     },
     {
-      href: `/${params.store_id}/clients`,
+      href: `/clients`,
       label: "clientes",
-      active: pathname === `/${params.store_id}/clients`,
+      active: pathname === `/clients`,
     },
     {
-      href: `/${params.store_id}/providers`,
+      href: `/providers`,
       label: "proveedores",
-      active: pathname === `/${params.store_id}/providers`,
+      active: pathname === `/providers`,
     },
     {
-      href: `/${params.store_id}/orders`,
+      href: `/orders`,
       label: "ventas",
-      active: pathname === `/${params.store_id}/orders`,
+      active: pathname === `/orders`,
     },
     {
-      href: `/${params.store_id}/settings`,
+      href: `/settings`,
       label: "ajustes",
-      active: pathname === `/${params.store_id}/settings`,
+      active: pathname === `/settings`,
     },
     {
-      href: `/${params.store_id}/categories`,
+      href: `/categories`,
       label: "categorías",
-      active: pathname === `/${params.store_id}/categories`,
+      active: pathname === `/categories`,
     },
   ];
 
@@ -66,8 +66,7 @@ export function MainNav({
               route.active
                 ? "text-primary font-bold dark:text-primary"
                 : "text-muted-foreground"
-            )}
-          >
+            )}>
             {route.label}
           </Link>
         );

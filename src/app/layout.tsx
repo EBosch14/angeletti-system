@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { Roboto as FontSans } from "next/font/google";
-// import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ProviderSession } from "@/components/provider/ProviderSession";
 import Navbar from "@/components/navbar";
 
-// const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -29,8 +27,7 @@ export default function RootLayout({
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
-        )}
-      >
+        )}>
         <ProviderSession>{children}</ProviderSession>
       </body>
     </html>

@@ -16,8 +16,7 @@ const Navbar = () => {
               onClick={() =>
                 signOut({ redirect: true, callbackUrl: "/sign_in" })
               }
-              variant="destructive"
-            >
+              variant="outline">
               Sign Out
             </Button>
           ) : (
