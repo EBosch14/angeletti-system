@@ -1,6 +1,6 @@
 "use client";
-import { MainNav } from "@/components/main_nav";
-import { Button } from "./ui/button";
+import { MainNav } from "@/components/nav/main_nav";
+import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
@@ -16,7 +16,8 @@ const Navbar = () => {
               onClick={() =>
                 signOut({ redirect: true, callbackUrl: "/sign_in" })
               }
-              variant="outline">
+              variant="outline"
+            >
               Sign Out
             </Button>
           ) : (

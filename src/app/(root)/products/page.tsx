@@ -4,6 +4,7 @@ import prismadb from "@/lib/prismadb";
 import { ProductClient } from "./components/client";
 import { ProductColumn } from "./components/columns";
 import { formatter } from "@/lib/utils";
+import { Aside } from "@/components/ui/aside";
 
 const ProductsPage = async () => {
   const products = await prismadb.product.findMany({
@@ -25,8 +26,17 @@ const ProductsPage = async () => {
     created_at: format(item.created_at, "dd/MM/yyyy (p)"),
   }));
 
+  const routes = [
+    { label: "Agenda", route: "/categories" },
+    { label: "Editar productos", route: "/" },
+    { label: "Capacidades y tamaños", route: "/" },
+  ];
+
   return (
-    <div className="flex-col">
+    <div className="flex">
+      <div className="flex h-screen p-5">
+        <Aside routes={routes} />
+      </div>
       <div className="flex-1 space-y-4 p-8 pt-6">
         <ProductClient data={formattedProducts} />
       </div>
