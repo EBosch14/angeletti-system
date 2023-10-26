@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import prismadb from "@/lib/prismadb";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
@@ -27,7 +28,9 @@ const formSchema = z.object({
 type StoreFormInput = z.infer<typeof formSchema>;
 
 export default function SignIn() {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<StoreFormInput>({
     resolver: zodResolver(formSchema),
@@ -38,17 +41,25 @@ export default function SignIn() {
   });
 
   const onSubmit = async (data: StoreFormInput) => {
+    setLoading(true);
+
     const signInData = await signIn("credentials", {
       username: data.username,
       password: data.password,
       redirect: false,
     });
+    console.log(signInData);
 
-    if (!signInData?.ok) {
-      console.log(signInData);
-    } else {
-      router.push(`/`);
-    }
+    // if (!signInData?.ok) {
+    //   toast({
+    //     title: "Uh oh! Authenticated unsuccessful",
+    //     description: "Incorrect password or username.",
+    //   });
+    // } else {
+    //   router.push(`/`);
+    // }
+
+    setLoading(false);
   };
 
   return (
@@ -88,7 +99,9 @@ export default function SignIn() {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button className={loading ? "opacity-50" : ""} type="submit">
+            Submit
+          </Button>
         </form>
       </Form>
     </div>

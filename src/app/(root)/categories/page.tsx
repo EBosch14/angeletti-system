@@ -5,11 +5,8 @@ import { CategoriesColumn } from "./components/columns";
 import { Aside } from "@/components/ui/aside";
 import Link from "next/link";
 
-const CategoriesPage = async ({ params }: { params: { store_id: string } }) => {
+const CategoriesPage = async () => {
   const categories = await prismadb.category.findMany({
-    where: {
-      store_id: params.store_id,
-    },
     orderBy: {
       created_at: "desc",
     },

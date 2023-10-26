@@ -73,9 +73,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer"
-            onClick={() =>
-              router.push(`/${params.store_id}/categories/${data.id}`)
-            }
+            onClick={() => router.push(`/categories/${data.id}`)}
           >
             <EditIcon className="mr-2 h-4 w-4" />
             Editar

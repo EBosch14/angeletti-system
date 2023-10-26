@@ -97,11 +97,9 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/${params.store_id}/categories/${params.category_id}`
-      );
+      await axios.delete(`/api/categories/${params.category_id}`);
       router.refresh();
-      router.push(`/${params.store_id}/categories`);
+      router.push(`/categories`);
       toast.success("Categoría eliminada exitosamente");
     } catch (error) {
       toast.error(
