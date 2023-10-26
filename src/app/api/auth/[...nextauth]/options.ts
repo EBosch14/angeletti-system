@@ -1,15 +1,12 @@
 import prismadb from "@/lib/prismadb";
-import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import jwt from "jsonwebtoken";
+import { JWT } from "next-auth/jwt";
+
+const SESSION_DURATION_SECONDS = 60 * 5;
 
 export const options: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
-  pages :{
-    signIn : "/sign_in"
-  },
-  session:{
-    strategy: "jwt"
-  },
   // adapter: PrismaAdapter(prismadb),
   providers: [
     CredentialsProvider({
@@ -18,50 +15,51 @@ export const options: NextAuthOptions = {
         username: {
           label: "username",
           type: "text",
-          placeholder: "Ingrese su nombre de usuario",
         },
         password: {
           label: "Contraseña",
           type: "password",
         },
       },
-      async authorize(credentials) {
+      authorize: async (credentials, req) => {
         if (!credentials || !credentials.username || !credentials.password)
           return null;
 
-        const dbStoreFound = await prismadb.store.findFirst({
+        const dbUserFound = await prismadb.user.findUnique({
           where: {
             username: credentials.username,
           },
         });
 
-        if (dbStoreFound && dbStoreFound.password === credentials.password) {
-          const { password, ...storeWithoutPassword } = dbStoreFound;
-          return storeWithoutPassword;
-        }
+        if (!dbUserFound) return null;
 
-        return null;
+        if (dbUserFound.password !== credentials.password) return null;
+
+        const { password, ...user } = dbUserFound;
+        return user;
       },
     }),
   ],
-  callbacks: {
-    async jwt({token, user}){
-      if(user){
-        return {
-          ...token,
-          username: user.username
-        }
-      }
-      return token
-    },
-    async session({session, user, token}){
-      return {
-        ...session,
-        user : {
-          ...session.user,
-          username: token.username
-        }
-      }
-    }
-  }
+  pages: {
+    signIn: "/login",
+    error: "/login",
+    signOut: "/login",
+  },
+  // secret: process.env.NEXTAUTH_SECRET,
+  // jwt: {
+  //   async encode({ secret, token }) {
+  //     if (!token) throw new Error("Invalid token");
+  //     return jwt.sign(token, secret);
+  //   },
+  //   async decode({ secret, token }) {
+  //     if (!token) throw new Error("Invalid token");
+  //     const decodedToken = jwt.verify(token, secret);
+  //     if (typeof decodedToken === "string") return JSON.parse(decodedToken);
+  //     return decodedToken;
+  //   },
+  // },
+  // session: {
+  //   strategy: "jwt",
+  //   maxAge: SESSION_DURATION_SECONDS,
+  // }
 };
