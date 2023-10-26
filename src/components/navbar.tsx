@@ -12,11 +12,7 @@ const Navbar = () => {
         <MainNav className="mx-6" />
         <div className="ml-auto flex items-center space-x-4">
           {status === "authenticated" ? (
-            <Button
-              onClick={() =>
-                signOut({ redirect: true, callbackUrl: "/sign_in" })
-              }
-              variant="outline">
+            <Button onClick={() => signOut()} variant="outline">
               Sign Out
             </Button>
           ) : (
