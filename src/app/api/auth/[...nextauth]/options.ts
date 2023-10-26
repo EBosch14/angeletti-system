@@ -29,14 +29,14 @@ export const options: NextAuthOptions = {
         if (!credentials || !credentials.username || !credentials.password)
           return null;
 
-        const dbStoreFound = await prismadb.store.findFirst({
+        const dbUserFound = await prismadb.user.findFirst({
           where: {
             username: credentials.username,
           },
         });
 
-        if (dbStoreFound && dbStoreFound.password === credentials.password) {
-          const { password, ...storeWithoutPassword } = dbStoreFound;
+        if (dbUserFound && dbUserFound.password === credentials.password) {
+          const { password, ...storeWithoutPassword } = dbUserFound;
           return storeWithoutPassword;
         }
 
