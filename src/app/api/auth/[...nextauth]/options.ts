@@ -1,8 +1,8 @@
 import prismadb from "@/lib/prismadb";
 import type { NextAuthOptions, Session, User } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import jwt from "jsonwebtoken";
-import { JWT } from "next-auth/jwt";
 
 const SESSION_DURATION_SECONDS = 60 * 5;
 
@@ -21,7 +21,7 @@ export const options: NextAuthOptions = {
           type: "password",
         },
       },
-      authorize: async (credentials, req) => {
+      async authorize(credentials) {
         if (!credentials || !credentials.username || !credentials.password)
           return null;
 
@@ -36,6 +36,7 @@ export const options: NextAuthOptions = {
         if (dbUserFound.password !== credentials.password) return null;
 
         const { password, ...user } = dbUserFound;
+        // console.log(user);
         return user;
       },
     }),
@@ -58,8 +59,13 @@ export const options: NextAuthOptions = {
   //     return decodedToken;
   //   },
   // },
-  // session: {
-  //   strategy: "jwt",
-  //   maxAge: SESSION_DURATION_SECONDS,
-  // }
+  callbacks: {
+    async jwt({ token, user }: { token: JWT; user: User }) {
+      return token;
+    },
+    async session({ session, token }: { session: Session; token: JWT }) {
+      session.user = token as JWT;
+      return session;
+    },
+  },
 };

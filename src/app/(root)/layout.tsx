@@ -7,8 +7,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { data, status, update } = useSession();
-  console.log(data?.user, status, update);
+  const { data: session } = useSession();
+  console.log(session);
 
   return (
     <>
