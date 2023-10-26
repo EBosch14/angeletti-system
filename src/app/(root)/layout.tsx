@@ -1,13 +1,15 @@
-import Navbar from "@/components/navbar";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { options } from "../api/auth/[...nextauth]/options";
+"use client";
 
-export default async function DashboardLayout({
+import Navbar from "@/components/navbar";
+import { useSession } from "next-auth/react";
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { data, status, update } = useSession();
+  console.log(data?.user, status, update);
+
   return (
     <>
       <Navbar />
