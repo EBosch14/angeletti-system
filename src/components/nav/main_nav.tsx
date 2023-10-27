@@ -15,7 +15,7 @@ export function MainNav({
     {
       href: ``,
       label: "general",
-      active: pathname === ``,
+      active: pathname === `/`,
     },
     {
       href: `/products`,

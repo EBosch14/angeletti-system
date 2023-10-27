@@ -1,15 +1,12 @@
 import prismadb from "@/lib/prismadb";
-import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, Session, User } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
+import jwt from "jsonwebtoken";
+
+const SESSION_DURATION_SECONDS = 60 * 5;
 
 export const options: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
-  pages :{
-    signIn : "/sign_in"
-  },
-  session:{
-    strategy: "jwt"
-  },
   // adapter: PrismaAdapter(prismadb),
   providers: [
     CredentialsProvider({
@@ -18,7 +15,6 @@ export const options: NextAuthOptions = {
         username: {
           label: "username",
           type: "text",
-          placeholder: "Ingrese su nombre de usuario",
         },
         password: {
           label: "Contraseña",
@@ -29,39 +25,58 @@ export const options: NextAuthOptions = {
         if (!credentials || !credentials.username || !credentials.password)
           return null;
 
+<<<<<<< HEAD
         const dbUserFound = await prismadb.user.findFirst({
+=======
+        const dbUserFound = await prismadb.user.findUnique({
+>>>>>>> e7557c54cc6e14553c52f1e4183015a44b6fcf58
           where: {
             username: credentials.username,
           },
         });
 
+<<<<<<< HEAD
         if (dbUserFound && dbUserFound.password === credentials.password) {
           const { password, ...storeWithoutPassword } = dbUserFound;
           return storeWithoutPassword;
         }
+=======
+        if (!dbUserFound) return null;
+>>>>>>> e7557c54cc6e14553c52f1e4183015a44b6fcf58
 
-        return null;
+        if (dbUserFound.password !== credentials.password) return null;
+
+        const { password, ...user } = dbUserFound;
+        // console.log(user);
+        return user;
       },
     }),
   ],
+  pages: {
+    signIn: "/login",
+    error: "/login",
+    signOut: "/login",
+  },
+  // secret: process.env.NEXTAUTH_SECRET,
+  // jwt: {
+  //   async encode({ secret, token }) {
+  //     if (!token) throw new Error("Invalid token");
+  //     return jwt.sign(token, secret);
+  //   },
+  //   async decode({ secret, token }) {
+  //     if (!token) throw new Error("Invalid token");
+  //     const decodedToken = jwt.verify(token, secret);
+  //     if (typeof decodedToken === "string") return JSON.parse(decodedToken);
+  //     return decodedToken;
+  //   },
+  // },
   callbacks: {
-    async jwt({token, user}){
-      if(user){
-        return {
-          ...token,
-          username: user.username
-        }
-      }
-      return token
+    async jwt({ token, user }: { token: JWT; user: User }) {
+      return token;
     },
-    async session({session, user, token}){
-      return {
-        ...session,
-        user : {
-          ...session.user,
-          username: token.username
-        }
-      }
-    }
-  }
+    async session({ session, token }: { session: Session; token: JWT }) {
+      session.user = token as JWT;
+      return session;
+    },
+  },
 };
