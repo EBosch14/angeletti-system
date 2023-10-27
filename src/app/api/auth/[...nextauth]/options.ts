@@ -25,24 +25,13 @@ export const options: NextAuthOptions = {
         if (!credentials || !credentials.username || !credentials.password)
           return null;
 
-<<<<<<< HEAD
-        const dbUserFound = await prismadb.user.findFirst({
-=======
         const dbUserFound = await prismadb.user.findUnique({
->>>>>>> e7557c54cc6e14553c52f1e4183015a44b6fcf58
           where: {
             username: credentials.username,
           },
         });
 
-<<<<<<< HEAD
-        if (dbUserFound && dbUserFound.password === credentials.password) {
-          const { password, ...storeWithoutPassword } = dbUserFound;
-          return storeWithoutPassword;
-        }
-=======
         if (!dbUserFound) return null;
->>>>>>> e7557c54cc6e14553c52f1e4183015a44b6fcf58
 
         if (dbUserFound.password !== credentials.password) return null;
 
