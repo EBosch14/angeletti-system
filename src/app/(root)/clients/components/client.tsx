@@ -4,16 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { PlusIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { CategoriesColumn, columns } from "./columns";
+import { ClientColumn, columns } from "./columns";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/ui/data-table";
-import { ApiList } from "@/components/ui/api-list";
+// import { ApiList } from "@/components/ui/api-list";
 
-interface CategoryClientProps {
-  data: CategoriesColumn[];
+interface ClientsClientProps {
+  data: ClientColumn[];
 }
 
-export const CategoryClient: React.FC<CategoryClientProps> = ({ data }) => {
+export const ProductClient: React.FC<ClientsClientProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
 
@@ -21,24 +21,19 @@ export const CategoryClient: React.FC<CategoryClientProps> = ({ data }) => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Categorías (${data?.length})`}
-          description="Administra las categorías para tu depósito"
+          title={`Clientes (${data?.length})`}
+          description="Administra los clientes"
         />
-        <Button onClick={() => router.push(`/categories/new`)}>
+        <Button onClick={() => router.push(`/clients/new`)}>
           <PlusIcon className="mr-2 h-4 w-4" />
           Agregar
         </Button>
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
-      {/* 
-
-      <Heading
-        title="API"
-        description="Llamadas a la API para las categorías"
-      />
-      <Separator />
-      <ApiList entityName="categories" entityIdName="category_id" /> */}
+      {/* <Heading title="API" description="Llamadas a la API para los productos" /> */}
+      {/* <Separator /> */}
+      {/* <ApiList entityName="products" entityIdName="productId" /> */}
     </>
   );
 };

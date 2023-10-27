@@ -1,5 +1,7 @@
+import { options } from "@/app/api/auth/[...nextauth]/options";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -26,13 +28,13 @@ export async function PATCH(
   req: Request,
   {
     params,
-  }: { params: { store_id: string; category_id: string; size_id: string } }
+  }: { params: { category_id: string; size_id: string } }
 ) {
   try {
-    const { userId: user_id } = auth();
-    const { name, value } = await req.json();
+    const session = getServerSession(options)
+    const { name } = await req.json();
 
-    if (!user_id) {
+    if (!session) {
       return new NextResponse("Unathenticated", { status: 401 });
     }
 
@@ -48,37 +50,20 @@ export async function PATCH(
       return new NextResponse("Name is required", { status: 400 });
     }
 
-    if (!value) {
-      return new NextResponse("Value is required", { status: 400 });
-    }
-
-    const storeByUserId = await prismadb.store.findFirst({
+    const category = await prismadb.category.findUnique({
       where: {
-        id: params.store_id,
-        user_id,
-      },
-    });
+        id: params.category_id
+      }
+    })
 
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
-
-    const categoryByStoreId = await prismadb.category.findFirst({
-      where: {
-        id: params.category_id,
-        store_id: params.store_id,
-      },
-    });
-
-    if (!categoryByStoreId) {
-      return new NextResponse("Unauthorized", { status: 403 });
+    if (!category) {
+      return new NextResponse("Category does not exist", { status: 400 });
     }
 
     const size = await prismadb.size.updateMany({
       where: { id: params.size_id },
       data: {
-        name,
-        value,
+        name
       },
     });
 
@@ -91,12 +76,12 @@ export async function PATCH(
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { store_id: string; size_id: string } }
+  { params }: { params: { category_id: string, size_id: string } }
 ) {
   try {
-    const { userId: user_id } = auth();
+    const session = getServerSession(options)
 
-    if (!user_id) {
+    if (!session) {
       return new NextResponse("Unathenticated", { status: 401 });
     }
 
@@ -104,15 +89,14 @@ export async function DELETE(
       return new NextResponse("Size id is required", { status: 400 });
     }
 
-    const storeByUserId = await prismadb.store.findFirst({
+    const category = await prismadb.category.findUnique({
       where: {
-        id: params.store_id,
-        user_id,
-      },
-    });
+        id: params.category_id
+      }
+    })
 
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 403 });
+    if (!category) {
+      return new NextResponse("Category does not exist", { status: 400 });
     }
 
     const size = await prismadb.size.deleteMany({

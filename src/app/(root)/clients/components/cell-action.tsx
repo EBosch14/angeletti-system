@@ -7,7 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CategoriesColumn } from "./columns";
+import { ClientColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { CopyIcon, EditIcon, MoreHorizontal, TrashIcon } from "lucide-react";
 import toast from "react-hot-toast";
@@ -17,7 +17,7 @@ import axios from "axios";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
-  data: CategoriesColumn;
+  data: ClientColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -26,20 +26,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const onCopy = (id: string) => {
-    navigator.clipboard.writeText(id);
+  const onCopy = (id: number) => {
+    navigator.clipboard.writeText(id.toString());
     toast.success("ID copiado en el portapapeles.");
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
-      // await axios.delete(`/api/${params.store_id}/categories/${data.id}`);
-      // router.refresh();
-      toast.success("Categoria eliminada exitosamente");
+      await axios.delete(`/api/clients/${data.id}`);
+      router.refresh();
+      toast.success("Cliente eliminado exitosamente");
     } catch (error) {
       toast.error(
-        "Ups! Algo salio mal, no se pudo eliminar la categoria seleccionado."
+        "Ups! Algo salio mal, no se pudo eliminar el cliente seleccionado."
       );
     } finally {
       setLoading(false);
@@ -57,7 +57,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="h-8 w-8 p-0">
+          <Button variant="ghost" className="h-8 w-8 p-0">
             <span className="sr-only">Abrir Menu</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -73,7 +73,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer"
-            onClick={() => router.push(`/categories/${data.id}`)}
+            onClick={() => router.push(`/clients/${data.id}`)}
           >
             <EditIcon className="mr-2 h-4 w-4" />
             Editar
