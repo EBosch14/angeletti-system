@@ -32,26 +32,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
-
-const FormSchema = z.object({
-  name: z
-    .string()
-    .min(3, {
-      message: "El nombre debe contener al menos 3 caracteres",
-    })
-    .max(30, {
-      message: "El nombre no debe contener más de 30 caracteres",
-    })
-    .trim(),
-  email: z.string().email().trim().optional(),
-  phone: z.string().trim(),
-  country: z.string().trim().optional(),
-  state: z.string().trim().optional(),
-  city: z.string().trim().optional(),
-  address: z.string().trim().optional(),
-  postal_code: z.string().trim().optional(),
-  // other_contacts: z.string().trim().optional(),
-});
+import { ProviderFormSchema as FormSchema } from "@/schemas/form-schemas";
 
 type ProviderFormInput = z.infer<typeof FormSchema>;
 
@@ -66,17 +47,17 @@ export const ProviderForm: React.FC<ProviderFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
-  const title = initialData ? "Editar producto" : "Crear producto";
+  const title = initialData ? "Editar proveedor" : "Crear proveedor";
   const description = initialData
-    ? "Editar un producto"
-    : "Crear un nuevo producto";
+    ? "Editar un proveedor"
+    : "Crear un nuevo proveedor";
   const toastMessage = initialData
-    ? "Producto actualizado correctamente."
-    : "Producto creado correctamente.";
+    ? "Proveedor actualizado correctamente."
+    : "Proveedor creado correctamente.";
   const action = initialData ? "Guardar cambios" : "Crear";
   const toastError = initialData
-    ? "Ups! Algo salio mal, no se pudo actualizar el producto."
-    : "Ups! Algo salio mal, no se pudo crear el producto.";
+    ? "Ups! Algo salio mal, no se pudo actualizar el proveedor."
+    : "Ups! Algo salio mal, no se pudo crear el proveedor.";
 
   const form = useForm<ProviderFormInput>({
     resolver: zodResolver(FormSchema),
@@ -96,15 +77,12 @@ export const ProviderForm: React.FC<ProviderFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(
-          `/api/${params.storeId}/products/${params.productId}`,
-          data
-        );
+        await axios.patch(`/api/providers/${params.provider_id}`, data);
       } else {
-        await axios.post(`/api/${params.storeId}/products`, data);
+        await axios.post(`/api/providers`, data);
       }
       router.refresh();
-      router.push(`/${params.storeId}/products`);
+      router.push(`/providers`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error(toastError);
@@ -116,13 +94,13 @@ export const ProviderForm: React.FC<ProviderFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
+      await axios.delete(`/api/providers/${params.provider_id}`);
       router.refresh();
-      router.push(`/${params.storeId}/products`);
-      toast.success("Producto eliminado exitosamente");
+      router.push("/providers");
+      toast.success("Proveedor eliminado exitosamente");
     } catch (error) {
       toast.error(
-        "Ups! Algo salio mal, no se pudo eliminar el producto seleccionado."
+        "Ups! Algo salio mal, no se pudo eliminar el proveedor seleccionado."
       );
     } finally {
       setLoading(false);
