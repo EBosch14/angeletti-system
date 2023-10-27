@@ -1,7 +1,6 @@
 "use client";
 
 import { AlertModal } from "@/components/modals/alert-modal";
-import { ApiAlert } from "@/components/ui/api-alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -25,9 +24,8 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { useOrigin } from "@/hooks/use-origin";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Category, Color, Image, Product, Size } from "@prisma/client";
+import { Category, Image, Product, Size } from "@prisma/client";
 import axios from "axios";
 import { TrashIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -51,16 +49,20 @@ const FormSchema = z.object({
       .object({
         url: z.string().trim(),
       })
-      .strict()
+      .optional()
   ),
-  price: z.coerce.number().min(1),
   stock: z.coerce.number().int().nonnegative(),
+  provider_id: z.number(),
+  provider_code: z.string().optional(),
+  purchase_price: z.coerce.number().min(1),
+  sale_price: z.coerce.number().min(1),
   description: z.string().min(10).max(5000).trim(),
-  categoryId: z.string().min(1).trim(),
-  colorId: z.string().min(1).trim(),
-  sizeId: z.string().min(1).trim(),
-  isFeatured: z.boolean().default(false).optional(),
-  isArchived: z.boolean().default(false).optional(),
+  category_id: z.string().min(1).trim(),
+  model: z.string().min(1).trim().optional(),
+  brand: z.string().min(1).trim().optional(),
+  size_id: z.string().min(1).trim(),
+  is_archived: z.boolean().default(false).optional(),
+  is_featured: z.boolean().default(false).optional(),
 });
 
 type ProductFormInput = z.infer<typeof FormSchema>;
@@ -72,16 +74,10 @@ interface ProductFormProps {
       })
     | null;
   categories: Category[];
-  colors: Color[];
   sizes: Size[];
 }
 
-export const ProductForm: React.FC<ProductFormProps> = ({
-  initialData,
-  categories,
-  colors,
-  sizes,
-}) => {
+export const ProductForm: React.FC<ProductFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -102,23 +98,21 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   const form = useForm<ProductFormInput>({
     resolver: zodResolver(FormSchema),
-    defaultValues: initialData
-      ? {
-          ...initialData,
-          price: parseFloat(String(initialData?.price)),
-        }
-      : {
-          name: "",
-          images: [],
-          price: 0,
-          stock: 0,
-          description: "",
-          categoryId: "",
-          colorId: "",
-          sizeId: "",
-          isArchived: false,
-          isFeatured: false,
-        },
+    defaultValues: {
+      name: initialData?.name || undefined,
+      brand: initialData?.brand || undefined,
+      category_id: initialData?.category_id || undefined,
+      description: initialData?.description || undefined,
+      images: initialData?.images || undefined,
+      model: initialData?.model || undefined,
+      sale_price: parseFloat(String(initialData?.sale_price)) || undefined,
+      stock: initialData?.stock || undefined,
+      provider_id: initialData?.provider_id || undefined,
+      is_archived: initialData?.is_archived || undefined,
+      size_id: initialData?.size_id || undefined,
+      purchase_price: parseFloat(String(initialData?.sale_price)) || undefined,
+      provider_code: initialData?.provider_code || undefined,
+    },
   });
 
   const onSubmit = async (data: ProductFormInput) => {
@@ -174,7 +168,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             disabled={loading}
             variant="destructive"
             size="icon"
-            onClick={() => setOpen(true)}>
+            onClick={() => setOpen(true)}
+          >
             <TrashIcon className="h-4 w-4" />
           </Button>
         )}
@@ -183,7 +178,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full">
+          className="space-y-8 w-full"
+        >
           <FormField
             control={form.control}
             name="images"
@@ -279,7 +275,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     disabled={loading}
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}>
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue
@@ -310,7 +307,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     disabled={loading}
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}>
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue
@@ -341,7 +339,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     disabled={loading}
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}>
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue
