@@ -8,18 +8,18 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(options);
+  // const session = await getServerSession(options);
 
-  if (!session) {
-    redirect("/sign_in");
-  }
+  // if (!session) {
+  //   redirect("/sign_in");
+  // }
 
-  if (session) {
-    return (
-      <>
-        <Navbar />
-        {children}
-      </>
-    );
-  }
+  // if (session) {
+  return (
+    <>
+      <Navbar />
+      {children}
+    </>
+  );
+  // }
 }
