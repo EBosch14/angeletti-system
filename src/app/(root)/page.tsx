@@ -4,15 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { formatter } from "@/lib/utils";
 import { CreditCardIcon, DollarSignIcon, PackageIcon } from "lucide-react";
 
-interface DashboardPageProps {
-  params: { storeId: string };
-}
-
-const RootPage: React.FC<DashboardPageProps> = async ({ params }) => {
-  const totalRevenue = () => {};
-  const salesCount = () => {};
-  const stockCount = () => {};
-
+const RootPage = async () => {
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">

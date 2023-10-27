@@ -1,25 +1,19 @@
-import Navbar from "@/components/nav/navbar";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { options } from "../api/auth/[...nextauth]/options";
+"use client";
 
-export default async function DashboardLayout({
+import Navbar from "@/components/navbar";
+import { useSession } from "next-auth/react";
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(options);
+  const { data: session } = useSession();
+  console.log(session);
 
-  if (!session) {
-    redirect("/sign_in");
-  }
-
-  if (session) {
-    return (
-      <>
-        <Navbar />
-        {children}
-      </>
-    );
-  }
+  return (
+    <>
+      <Navbar />
+      {children}
+    </>
+  );
 }
