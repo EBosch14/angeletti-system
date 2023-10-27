@@ -12,23 +12,16 @@ import {
 } from "@/components/ui/form";
 import { Heading } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-  SelectItem,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Provider, Category } from "@prisma/client";
+import { Category } from "@prisma/client";
 import axios from "axios";
 import { TrashIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import * as z from "zod";
+import z from "zod";
 
 const FormSchema = z.object({
   name: z
@@ -77,15 +70,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(
-          `/api/${params.store_id}/categories/${params.category_id}`,
-          data
-        );
+        await axios.patch(`/api//categories/${params.category_id}`, data);
       } else {
-        await axios.post(`/api/${params.store_id}/categories`, data);
+        await axios.post(`/api/categories`, data);
       }
       router.refresh();
-      router.push(`/${params.store_id}/categories`);
+      router.push(`/categories`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error(toastError);

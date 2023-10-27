@@ -1,31 +1,18 @@
 "use client";
 
 import { AlertModal } from "@/components/modals/alert-modal";
-import { ApiAlert } from "@/components/ui/api-alert";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Heading } from "@/components/ui/heading";
-import { ImageUpload } from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
-import { useOrigin } from "@/hooks/use-origin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Client } from "@prisma/client";
 import axios from "axios";
@@ -34,7 +21,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import * as z from "zod";
+import z from "zod";
 
 const FormSchema = z.object({
   name: z
@@ -47,14 +34,14 @@ const FormSchema = z.object({
     })
     .trim(),
   phone: z.string().min(8),
-  dni: z.string().nullable(),
-  email: z.string().email().nullable(),
-  country: z.string().email().nullable(),
-  state: z.string().email().nullable(),
-  city: z.string().email().nullable(),
-  address: z.string().email().nullable(),
-  postal_code: z.string().email().nullable(),
-  other_contacs: z.string().email().nullable(),
+  dni: z.string().optional(),
+  email: z.string().email().optional(),
+  country: z.string().optional(),
+  state: z.string().optional(),
+  city: z.string().optional(),
+  address: z.string().optional(),
+  postal_code: z.string().optional(),
+  other_contacs: z.object({}).optional(),
 });
 
 type ClientFormInput = z.infer<typeof FormSchema>;
@@ -84,20 +71,18 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
 
   const form = useForm<ClientFormInput>({
     resolver: zodResolver(FormSchema),
-    defaultValues: initialData
-      ? initialData
-      : {
-          name: "",
-          phone: "",
-          email: "",
-          address: "",
-          city: "",
-          country: "",
-          dni: "",
-          other_contacs: "",
-          postal_code: "",
-          state: "",
-        },
+    defaultValues: {
+      name: initialData?.name || undefined,
+      phone: initialData?.phone || undefined,
+      email: initialData?.email || undefined,
+      address: initialData?.address || undefined,
+      city: initialData?.city || undefined,
+      country: initialData?.country || undefined,
+      dni: initialData?.dni || undefined,
+      other_contacs: undefined,
+      postal_code: initialData?.postal_code || undefined,
+      state: initialData?.state || undefined,
+    },
   });
 
   const onSubmit = async (data: ClientFormInput) => {
@@ -172,7 +157,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Nombre de la categoría"
+                      placeholder="Nombre completo del cliente"
                       {...field}
                     />
                   </FormControl>
@@ -180,6 +165,74 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Teléfono</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Número de teléfono"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="dni"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>DNI</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Número de documento"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Dirección</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Dirección"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="example@gmail.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />{" "}
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}

@@ -3,7 +3,6 @@ import { format } from "date-fns";
 import prismadb from "@/lib/prismadb";
 import { ProductClient } from "./components/client";
 import { ClientColumn } from "./components/columns";
-import { formatter } from "@/lib/utils";
 import { Aside } from "@/components/ui/aside";
 
 const ProductsPage = async () => {

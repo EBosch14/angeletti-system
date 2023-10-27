@@ -24,9 +24,7 @@ export const CategoryClient: React.FC<CategoryClientProps> = ({ data }) => {
           title={`Categorías (${data?.length})`}
           description="Administra las categorías para tu depósito"
         />
-        <Button
-          onClick={() => router.push(`/${params.store_id}/categories/new`)}
-        >
+        <Button onClick={() => router.push(`/categories/new`)}>
           <PlusIcon className="mr-2 h-4 w-4" />
           Agregar
         </Button>

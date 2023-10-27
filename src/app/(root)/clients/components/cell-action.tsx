@@ -7,7 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ProductColumn } from "./columns";
+import { ClientColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { CopyIcon, EditIcon, MoreHorizontal, TrashIcon } from "lucide-react";
 import toast from "react-hot-toast";
@@ -17,7 +17,7 @@ import axios from "axios";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
-  data: ProductColumn;
+  data: ClientColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -34,12 +34,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/products/${data.id}`);
+      await axios.delete(`/api/clients/${data.id}`);
       router.refresh();
-      toast.success("Producto eliminado exitosamente");
+      toast.success("Cliente eliminado exitosamente");
     } catch (error) {
       toast.error(
-        "Ups! Algo salio mal, no se pudo eliminar el producto seleccionado."
+        "Ups! Algo salio mal, no se pudo eliminar el cliente seleccionado."
       );
     } finally {
       setLoading(false);
@@ -66,21 +66,22 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Acciones</DropdownMenuLabel>
           <DropdownMenuItem
             className="cursor-pointer"
-            onClick={() => onCopy(data.id)}>
+            onClick={() => onCopy(data.id)}
+          >
             <CopyIcon className="mr-2 h-4 w-4" />
             Copiar id
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer"
-            onClick={() =>
-              router.push(`/${params.storeId}/products/${data.id}`)
-            }>
+            onClick={() => router.push(`/clients/${data.id}`)}
+          >
             <EditIcon className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer"
-            onClick={() => setOpen(true)}>
+            onClick={() => setOpen(true)}
+          >
             <TrashIcon className="mr-2 h-4 w-4" />
             Eliminar
           </DropdownMenuItem>
