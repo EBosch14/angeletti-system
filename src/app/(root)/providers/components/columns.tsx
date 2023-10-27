@@ -22,15 +22,15 @@ export const columns: ColumnDef<ProviderColumn>[] = [
     header: "Nombre",
   },
   {
-    accessorKey: "price",
-    header: "Precio",
+    accessorKey: "tel",
+    header: "Telefono",
   },
   {
-    accessorKey: "provider",
-    header: "Proveedor",
+    accessorKey: "tot_prods",
+    header: "Productos comprados",
   },
   {
-    accessorKey: "created_at",
+    accessorKey: "updated_at",
     header: "Fecha de creación",
   },
 ];

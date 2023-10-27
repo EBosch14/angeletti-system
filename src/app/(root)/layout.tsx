@@ -1,15 +1,13 @@
-"use client";
-
 import Navbar from "@/components/nav/navbar";
-import { useSession } from "next-auth/react";
-export default function RootLayout({
+import { Session, getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/options";
+import { JWT } from "next-auth/jwt";
+import prismadb from "@/lib/prismadb";
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session } = useSession();
-  console.log(session);
-
   return (
     <>
       <Navbar />
