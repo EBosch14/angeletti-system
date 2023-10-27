@@ -8,7 +8,7 @@ const BillboardPage = async ({
 }: {
   params: { product_id: string };
 }) => {
-  let product: Product | null;
+  let product: Product | null = null;
 
   const id =
     typeof Number(params.product_id) === "number"
@@ -28,13 +28,17 @@ const BillboardPage = async ({
     }
   }
 
-  // const categories = prismadb.category.findMany()
-  // const sizes = prismadb.size.findMany()
+  const categories = await prismadb.category.findMany();
+  const sizes = await prismadb.size.findMany();
 
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <ProductForm initialData={product} />
+        <ProductForm
+          initialData={product}
+          categories={categories}
+          sizes={sizes}
+        />
       </div>
     </div>
   );
