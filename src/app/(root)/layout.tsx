@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/nav/navbar";
 import { useSession } from "next-auth/react";
 export default function RootLayout({
   children,
