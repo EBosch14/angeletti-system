@@ -17,13 +17,19 @@ enum UserRole {
 }
 
 model User {
-  id       String   @id @default(uuid())
-  username String   @unique
-  password String
-  role     UserRole @default(USER)
-  image    String   @default("https://res.cloudinary.com/dukbxejav/image/upload/v1698210270/angeletti/usuario_vxe9rk.png")
-  store_id String
-  Store    Store    @relation(fields: [store_id], references: [id])
+  id               String    @id @default(uuid())
+  username         String    @unique
+  password         String
+  role             UserRole  @default(USER)
+  image            String    @default("https://res.cloudinary.com/dukbxejav/image/upload/v1698210270/angeletti/usuario_vxe9rk.png")
+  store_id         String
+  Store            Store     @relation(fields: [store_id], references: [id])
+  created_products Product[] @relation("Created_Products")
+  updated_products Product[] @relation("Updated_Products")
+  created_services Service[] @relation("Created_Services")
+  updated_services Service[] @relation("Updated_Services")
+  created_orders   Order[]   @relation("Created_Orders")
+  updated_orders   Order[]   @relation("Updated_Orders")
 
   @@index([store_id])
 }
@@ -124,9 +130,15 @@ model Service {
   Client        Client   @relation(fields: [client_id], references: [id])
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
+  Created_By    User     @relation("Created_Services", fields: [created_by_id], references: [id])
+  Updated_By    User     @relation("Updated_Services", fields: [updated_by_id], references: [id])
+  created_by_id String
+  updated_by_id String
 
   @@index([store_id])
   @@index([client_id])
+  @@index([created_by_id])
+  @@index([updated_by_id])
 }
 
 model Product {
@@ -151,24 +163,36 @@ model Product {
   Store          Store    @relation(fields: [store_id], references: [id])
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
+  Created_By     User     @relation("Created_Products", fields: [created_by_id], references: [id])
+  Updated_By     User     @relation("Updated_Products", fields: [updated_by_id], references: [id])
+  created_by_id  String
+  updated_by_id  String
 
   @@index([category_id])
   @@index([size_id])
   @@index([provider_id])
   @@index([store_id])
+  @@index([created_by_id])
+  @@index([updated_by_id])
 }
 
 model Order {
-  id         Int      @id @default(autoincrement())
-  client_id  Int
-  store_id   String
-  Store      Store    @relation(fields: [store_id], references: [id])
-  Client     Client   @relation(fields: [client_id], references: [id])
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  client_id     Int
+  store_id      String
+  Store         Store    @relation(fields: [store_id], references: [id])
+  Client        Client   @relation(fields: [client_id], references: [id])
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  Created_By    User     @relation("Created_Orders", fields: [created_by_id], references: [id])
+  Updated_By    User     @relation("Updated_Orders", fields: [updated_by_id], references: [id])
+  created_by_id String
+  updated_by_id String
 
   @@index([store_id])
   @@index([client_id])
+  @@index([created_by_id])
+  @@index([updated_by_id])
 }
 
 model Image {
