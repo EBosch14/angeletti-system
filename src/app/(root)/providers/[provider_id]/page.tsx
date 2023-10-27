@@ -9,10 +9,10 @@ const BillboardPage = async ({
   params: { provider_id: string };
 }) => {
   let provider: Provider | null = null;
-  if (typeof params.provider_id === "number") {
+  if (!isNaN(Number(params.provider_id))) {
     provider = await prismadb.provider.findUnique({
       where: {
-        id: params.provider_id,
+        id: Number(params.provider_id),
       },
     });
   }

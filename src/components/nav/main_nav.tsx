@@ -20,37 +20,37 @@ export function MainNav({
     {
       href: `/products`,
       label: "productos",
-      active: pathname === `/products`,
+      active: pathname.includes("products"),
     },
     {
       href: `/services`,
       label: "servicios",
-      active: pathname === `/services`,
+      active: pathname.includes("services"),
     },
     {
       href: `/clients`,
       label: "clientes",
-      active: pathname === `/clients`,
+      active: pathname.includes("clients"),
     },
     {
       href: `/providers`,
       label: "proveedores",
-      active: pathname === `/providers`,
+      active: pathname.includes("providers"),
     },
     {
       href: `/orders`,
       label: "ventas",
-      active: pathname === `/orders`,
+      active: pathname.includes("orders"),
     },
     {
       href: `/settings`,
       label: "ajustes",
-      active: pathname === `/settings`,
+      active: pathname.includes("settings"),
     },
     {
       href: `/categories`,
       label: "categorías",
-      active: pathname === `/categories`,
+      active: pathname.includes("categories"),
     },
   ];
 

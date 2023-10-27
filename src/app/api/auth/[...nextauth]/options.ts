@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const SESSION_DURATION_SECONDS = 60 * 5;
 
-export const options: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   // adapter: PrismaAdapter(prismadb),
   providers: [
     CredentialsProvider({
