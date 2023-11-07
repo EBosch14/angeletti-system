@@ -3,7 +3,6 @@ import { format } from "date-fns";
 import prismadb from "@/lib/prismadb";
 import { ProviderClient } from "./components/client";
 import { ProviderColumn } from "./components/columns";
-import { formatter } from "@/lib/utils";
 
 const ProvidersPage = async () => {
   const products = await prismadb.provider.findMany({

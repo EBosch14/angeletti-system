@@ -2,7 +2,7 @@ import prismadb from "@/lib/prismadb";
 import type { NextAuthOptions, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 
 const SESSION_DURATION_SECONDS = 60 * 5;
 

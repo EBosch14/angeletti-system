@@ -30,6 +30,7 @@ const BillboardPage = async ({
 
   const categories = await prismadb.category.findMany();
   const sizes = await prismadb.size.findMany();
+  const providers = await prismadb.provider.findMany();
 
   return (
     <div className="flex-col">
@@ -38,6 +39,7 @@ const BillboardPage = async ({
           initialData={product}
           categories={categories}
           sizes={sizes}
+          providers={providers}
         />
       </div>
     </div>

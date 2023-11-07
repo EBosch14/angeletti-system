@@ -40,16 +40,18 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   return (
     <div>
       <div className="mb-4 flex items-center gap-4">
-        {value.map((url) => (
+        {value?.map((url) => (
           <div
             key={url}
-            className="relative w-52 h-52 rounded-md overflow-hidden">
+            className="relative w-52 h-52 rounded-md overflow-hidden"
+          >
             <div className="absolute top-2 right-2 z-10">
               <Button
                 type="button"
                 variant="destructive"
                 size="icon"
-                onClick={() => onRemove(url)}>
+                onClick={() => onRemove(url)}
+              >
                 <TrashIcon className="h-4 w-4" />
               </Button>
             </div>
@@ -64,7 +66,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           multiple: multipleFiles ? true : false,
           maxFiles: multipleFiles ? 10 : 1,
           folder: "ADT",
-        }}>
+        }}
+      >
         {(options) => {
           const onClick = () => {
             options.open();
@@ -74,7 +77,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
               type="button"
               variant="secondary"
               onClick={onClick}
-              disabled={disable}>
+              disabled={disable}
+            >
               <ImagePlusIcon className="h-4 w-4 mr-2" />
               Selecciona una imagen
             </Button>

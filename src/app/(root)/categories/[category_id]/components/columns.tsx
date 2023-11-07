@@ -2,15 +2,13 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-export type ProductColumn = {
-  id: number;
+export type SizesColumn = {
+  id: string;
   name: string;
-  price: string | number;
-  provider: string;
-  created_at: string;
+  products: number;
 };
 
-export const columns: ColumnDef<ProductColumn>[] = [
+export const columns: ColumnDef<SizesColumn>[] = [
   // {
   //   id: "select",
   //   header: ({ table }) => (
@@ -32,23 +30,15 @@ export const columns: ColumnDef<ProductColumn>[] = [
   // },
   {
     accessorKey: "id",
-    header: "ID",
+    header: "id",
   },
   {
     accessorKey: "name",
     header: "Nombre",
   },
   {
-    accessorKey: "price",
-    header: "Precio",
-  },
-  {
-    accessorKey: "provider",
-    header: "Proveedor",
-  },
-  {
-    accessorKey: "created_at",
-    header: "Fecha de creación",
+    accessorKey: "products",
+    header: "Productos",
   },
   // {
   //   id: "action",
