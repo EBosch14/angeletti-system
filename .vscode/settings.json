@@ -1,3 +1,8 @@
 {
-  "conventionalCommits.scopes": ["/", "/src", "/src/app/api"]
+  "conventionalCommits.scopes": [
+    "/",
+    "/src",
+    "/src/app/api",
+    "/src/app/(root)"
+  ]
 }
