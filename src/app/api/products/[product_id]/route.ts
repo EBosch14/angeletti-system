@@ -6,29 +6,37 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function GET(
   _req: Request,
-  { params }: { params: { client_id: string } }
+  { params }: { params: { product_id: string } }
 ) {
   try {
-    if (!params.client_id) {
-      return new NextResponse("Client id is required", { status: 400 });
+    if (!params.product_id) {
+      return new NextResponse("Product id is required", { status: 400 });
     }
 
-    const id = Number(params.client_id)
+    const id = Number(params.product_id)
 
-    const client = await prismadb.client.findUnique({
+    const product = await prismadb.product.findUnique({
       where: {id},
+      include :{
+        images : true,
+        Category: true,
+        Provider: true,
+        Size : true,
+        Created_By: true,
+        Updated_By: true
+      }
     });
 
-    return NextResponse.json(client);
+    return NextResponse.json(product);
   } catch (error) {
-    console.log("[CATEGORY_GET]", error);
+    console.log("[PRODUCT_GET]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { client_id: string } }
+  { params }: { params: { product_id: string } }
 ) {
   try {
     const session = getServerSession(authOptions);
@@ -38,15 +46,15 @@ export async function PATCH(
       return new NextResponse("Unathenticated", { status: 401 });
     }
 
-    if (!params.client_id) {
-      return new NextResponse("Client id is required", { status: 400 });
+    if (!params.product_id) {
+      return new NextResponse("Product id is required", { status: 400 });
     }
 
     if (!data) {
       return new NextResponse("Data  is required", { status: 400 });
     }
 
-    const id = Number(params.client_id)
+    const id = Number(params.product_id)
 
     const client = await prismadb.client.updateMany({
       where: { id},
@@ -57,14 +65,14 @@ export async function PATCH(
 
     return NextResponse.json(client);
   } catch (error) {
-    console.log("[CATEGORY_PATCH]", error);
+    console.log("[PRODUCT_PATCH]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: {client_id: string } }
+  { params }: { params: {product_id: string } }
 ) {
   try {
     const session = getServerSession(authOptions);
@@ -72,11 +80,11 @@ export async function DELETE(
       return new NextResponse("Unathenticated", { status: 401 });
     }
 
-    if (!params.client_id) {
-      return new NextResponse("Category id is required", { status: 400 });
+    if (!params.product_id) {
+      return new NextResponse("Product id is required", { status: 400 });
     }
 
-    const id = Number(params.client_id)
+    const id = Number(params.product_id)
 
     const client = await prismadb.client.deleteMany({
       where: { id },
@@ -84,7 +92,7 @@ export async function DELETE(
 
     return NextResponse.json(client);
   } catch (error) {
-    console.log("[CATEGORY_DELETE]", error);
+    console.log("[PRODUCT_DELETE]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

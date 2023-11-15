@@ -3,7 +3,6 @@ import prismadb from "@/lib/prismadb";
 import { CategoryClient } from "./components/client";
 import { CategoriesColumn } from "./components/columns";
 import { Aside } from "@/components/ui/aside";
-import Link from "next/link";
 
 const CategoriesPage = async () => {
   const categories = await prismadb.category.findMany({

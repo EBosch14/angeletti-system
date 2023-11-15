@@ -3,33 +3,34 @@
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { PlusIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { ProductColumn, columns } from "./columns";
+import { useParams, useRouter } from "next/navigation";
+import { ServicesColumn, columns } from "./columns";
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/ui/data-table";
 // import { ApiList } from "@/components/ui/api-list";
 
-interface ProductClientProps {
-  data: ProductColumn[];
+interface ProvidersClientProps {
+  data: ServicesColumn[];
 }
 
-export const ProductClient: React.FC<ProductClientProps> = ({ data }) => {
+export const ProviderClient: React.FC<ProvidersClientProps> = ({ data }) => {
   const router = useRouter();
+  const params = useParams();
 
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Productos (${data?.length})`}
-          description="Administra los productos de tu tienda"
+          title={`Servicios (${data?.length})`}
+          description="Administra los servicios de tu tienda"
         />
-        <Button onClick={() => router.push(`/products/new`)}>
+        <Button onClick={() => router.push(`/services/new`)}>
           <PlusIcon className="mr-2 h-4 w-4" />
           Agregar
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="name" columns={columns} data={data} />
+      <DataTable searchKey="id" columns={columns} data={data} />
     </>
   );
 };

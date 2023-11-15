@@ -1,19 +1,36 @@
 import prismadb from "@/lib/prismadb";
 import { ProductForm } from "./components/product-form";
+import { redirect } from "next/navigation";
+import { Product } from "@prisma/client";
 
 const BillboardPage = async ({
   params,
 }: {
-  params: { product_id: number };
+  params: { product_id: string };
 }) => {
-  const product = await prismadb.product.findUnique({
-    where: { id: params.product_id },
-    include: {
-      images: true,
-      Category: true,
-      Size: true,
-    },
-  });
+  let product: Product | null = null;
+
+  const id =
+    typeof Number(params.product_id) === "number"
+      ? Number(params.product_id)
+      : null;
+
+  if (id) {
+    product = await prismadb.product.findUnique({
+      where: { id },
+      include: {
+        images: true,
+      },
+    });
+
+    if (!product) {
+      redirect("/products");
+    }
+  }
+
+  const categories = await prismadb.category.findMany();
+  const sizes = await prismadb.size.findMany();
+  const providers = await prismadb.provider.findMany();
 
   const categories = await prismadb.category.findMany();
   const sizes = await prismadb.size.findMany();
@@ -25,6 +42,7 @@ const BillboardPage = async ({
           initialData={product}
           categories={categories}
           sizes={sizes}
+          providers={providers}
         />
       </div>
     </div>

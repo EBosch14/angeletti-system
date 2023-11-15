@@ -22,7 +22,7 @@ const ProductsPage = async () => {
     id: item.id,
     name: item.name,
     price: formatter.format(item.sale_price.toNumber()),
-    proivder: item.Provider.name,
+    provider: item.Provider.name,
     created_at: format(item.created_at, "dd/MM/yyyy (p)"),
   }));
 
