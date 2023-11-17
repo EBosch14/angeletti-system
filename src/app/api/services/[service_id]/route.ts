@@ -32,13 +32,30 @@ export async function PATCH(
 
     if (!foundStore) return new NextResponse("Unauthorized", { status: 403 });
 
+        const {client_id, is_paid } = data
 
-    const updatedService = await prismadb.provider.update({
+    const client = await prismadb.client.findFirst({
+      where :{
+        id : Number(client_id)
+      }
+    })
+
+    if (!client) {
+      return new NextResponse("The client does not exist ", { status: 403 });
+    }
+    
+
+
+    const updatedService = await prismadb.service.update({
       where: {
         id:service_id,
       },
       data: {
-      ...data
+      ...data,
+      used_products: {},
+      client_id: client.id,
+      is_paid: is_paid == "si"? true : false,
+      updated_by_id: session.user.sub
       },
     });
 
@@ -75,7 +92,7 @@ export async function DELETE(
 
     if (!foundStore) return new NextResponse("Unauthorized", { status: 403 });
 
-    const deletedService = await prismadb.provider.delete({
+    const deletedService = await prismadb.service.delete({
       where: {
         id: service_id,
       },

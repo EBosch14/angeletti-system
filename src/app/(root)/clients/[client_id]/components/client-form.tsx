@@ -42,6 +42,7 @@ const FormSchema = z.object({
   address: z.string().optional(),
   postal_code: z.string().optional(),
   other_contacs: z.object({}).optional(),
+  birthday: z.string().optional(),
 });
 
 type ClientFormInput = z.infer<typeof FormSchema>;
@@ -82,6 +83,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
       other_contacs: undefined,
       postal_code: initialData?.postal_code || undefined,
       state: initialData?.state || undefined,
+      birthday: initialData?.birthday || undefined,
     },
   });
 
@@ -106,9 +108,9 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/clients/${params.client_id}`);
+      await axios.delete(`/api/providers/${params.client_id}`);
       router.refresh();
-      router.push(`/clients`);
+      router.push(`/providers`);
       toast.success("Cliente eliminado exitosamente");
     } catch (error) {
       toast.error(
@@ -232,7 +234,38 @@ export const ClientForm: React.FC<ClientFormProps> = ({ initialData }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />{" "}
+            />
+            <FormField
+              control={form.control}
+              name="postal_code"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Codigo Postal</FormLabel>
+                  <FormControl>
+                    <Input disabled={loading} placeholder="0000" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="birthday"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Fecha de nacimiento</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      disabled={loading}
+                      placeholder=".."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}

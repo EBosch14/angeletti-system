@@ -1,6 +1,6 @@
 import prismadb from "@/lib/prismadb";
 import { redirect } from "next/navigation";
-import { ServiceForm } from "./components/provider-form";
+import { ServiceForm } from "./components/service-form";
 import { Service } from "@prisma/client";
 
 const BillboardPage = async ({

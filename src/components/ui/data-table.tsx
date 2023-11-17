@@ -97,9 +97,27 @@ export function DataTable<TData, TValue>({
                     router.push(
                       `${pathname}/${row.getVisibleCells()[0].getValue()}`
                     )
-                  }>
+                  }
+                >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={
+                        cell.id.includes("is_paid")
+                          ? `rounded-full flex h-4 mt-2 items-center ${
+                              cell.getValue() == "si"
+                                ? "bg-green-500"
+                                : "bg-red-600"
+                            }`
+                          : cell.id.includes("state")
+                          ? `rounded-full flex h-4 mt-2 items-center ${
+                              cell.getValue() == "En proceso"
+                                ? "bg-yellow-400"
+                                : "bg-green-500"
+                            }`
+                          : ""
+                      }
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -112,7 +130,8 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center">
+                  className="h-24 text-center"
+                >
                   Sin resultados
                 </TableCell>
               </TableRow>
@@ -130,14 +149,16 @@ export function DataTable<TData, TValue>({
             variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}>
+            disabled={!table.getCanPreviousPage()}
+          >
             Atrás
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}>
+            disabled={!table.getCanNextPage()}
+          >
             Siguiente
           </Button>
         </div>

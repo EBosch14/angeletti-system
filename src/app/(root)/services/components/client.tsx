@@ -17,6 +17,12 @@ export const ProviderClient: React.FC<ProvidersClientProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
 
+  const dataFormated = data.map((e) => {
+    const { is_paid, ...restE } = e;
+    let newValue = is_paid ? "si" : "no";
+    return { ...restE, is_paid: newValue };
+  });
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -30,7 +36,7 @@ export const ProviderClient: React.FC<ProvidersClientProps> = ({ data }) => {
         </Button>
       </div>
       <Separator />
-      <DataTable searchKey="id" columns={columns} data={data} />
+      <DataTable searchKey="id" columns={columns} data={dataFormated} />
     </>
   );
 };

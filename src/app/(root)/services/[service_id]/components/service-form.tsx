@@ -38,7 +38,7 @@ const FormSchema = z.object({
   issues: z.string(),
   description: z.string(),
   solution: z.string().optional(),
-  state: z.string().optional(),
+  state: z.string(),
   price: z.coerce.number().optional(),
   is_paid: z.string(),
 });
@@ -80,7 +80,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
       description: initialData?.description,
       solution: initialData?.solution || undefined,
       price: parseFloat(String(initialData?.price)),
-      state: initialData?.state,
+      state: initialData?.state ? "En proceso" : "Terminado",
       is_paid: initialData?.is_paid ? "si" : "no",
     },
   });
@@ -93,9 +93,9 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
       } else {
         await axios.post(`/api/services`, data);
       }
-      // router.refresh();
-      // router.push(`/providers`);
-      // toast.success(toastMessage);
+      router.refresh();
+      router.push(`/services`);
+      toast.success(toastMessage);
     } catch (error) {
       toast.error(toastError);
     } finally {
@@ -159,7 +159,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
                     disabled={loading}
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -192,7 +191,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
                   <FormLabel>Problema</FormLabel>
                   <FormControl>
                     <Input
-                      defaultValue={field.value}
                       disabled={loading}
                       placeholder="No enciende la pantala cuando..."
                       {...field}
@@ -230,7 +228,6 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
                   <FormLabel>Solucion</FormLabel>
                   <FormControl>
                     <Input
-                      defaultValue={field.value}
                       disabled={loading}
                       placeholder="Cambiamos el..."
                       {...field}
@@ -249,15 +246,11 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
                   <Select
                     disabled={loading}
                     onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
+                    {...field}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Selecciona una opcion"
-                        />
+                        <SelectValue placeholder="Selecciona una opcion" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -280,12 +273,7 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
                 <FormItem>
                   <FormLabel>Precio</FormLabel>
                   <FormControl>
-                    <Input
-                      defaultValue={field.value}
-                      disabled={loading}
-                      placeholder="9.99"
-                      {...field}
-                    />
+                    <Input disabled={loading} placeholder="9.99" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -300,22 +288,18 @@ export const ServiceForm: React.FC<ServiceFormProps> = ({
                   <Select
                     disabled={loading}
                     onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
+                    {...field}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Selecciona una opcion"
-                        />
+                        <SelectValue placeholder="Selecciona una opcion" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem key="1" value="true">
+                      <SelectItem key="1" value="si">
                         Si
                       </SelectItem>
-                      <SelectItem key="2" value="false">
+                      <SelectItem key="2" value="no">
                         No
                       </SelectItem>
                     </SelectContent>

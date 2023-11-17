@@ -10,7 +10,7 @@ export type ServicesColumn = {
   state: string;
   price: string | number;
   created_at: string;
-  is_paid: boolean;
+  is_paid: string;
 };
 
 export const columns: ColumnDef<ServicesColumn>[] = [

@@ -47,7 +47,7 @@ export async function POST(
         used_products: {},
         store_id : store.id,
         client_id: client.id,
-        is_paid: is_paid == "true"? true : false,
+        is_paid: is_paid == "si"? true : false,
         created_by_id: session.user.sub,
         updated_by_id: session.user.sub
       }
